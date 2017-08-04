@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/DamienP33/express-mongoose-generator.svg?branch=master)](https://travis-ci.org/DamienP33/express-mongoose-generator)
-# express-mongoose-generator
+# express-mongoose-generator-promise
 
-It’s a mongoose model, REST controller and Express router code generator for Express.js 4 application.
+A mongoose model, REST controller and Express router code generator for Express.js 4 application. Branched from DamienP33's mongoose generator and converted to ES6 syntax/promisified.
 
 ## Installation
 ```bash
@@ -10,7 +10,7 @@ $ npm install -g express-mongoose-generator
 
 ## Usage
 ### Non-Interactive mode
-Generates a Mongoose model, a REST controller and Express router :
+Generates a Mongoose model and a RESTful Express router :
 ```bash
 $ mongoose-gen -m car -f carDoor:number,color -r
         create: ./models/cardModel.js
@@ -35,7 +35,7 @@ $ mongoose-gen -m car -f carDoor:number,color -r
 
 ### Interactive mode
 
-Generates a Mongoose model, a REST controller and Express router :
+Generates a Mongoose model and a RESTful Express router :
 ```bash
 $ mongoose-gen
 Model Name : car
@@ -79,159 +79,68 @@ routes/carRoutes.js :
 ```javascript
 var express = require('express');
 var router = express.Router();
-var carController = require('../controllers/carController.js');
+var carModel = require('../models/carModel.js');
+/**
+ * carRouter.js
+ *
+ * @description :: Server-side logic for managing cars.
+ */
 
 /*
  * GET
  */
-router.get('/', carController.list);
-
+router.get('/', (req, res, next) => {
+    carModel.find()
+        .select('-__v')
+        .then(cars => res.send(cars))
+        .catch(next);
+    })
 /*
  * GET
  */
-router.get('/:id', carController.show);
+router.get('/:id', (req, res, next) => {
+    const id = req.params.id;
+    carModel.findById(id).lean()
+        .then(car => res.send(car))
+        .catch(next);
+    })
 
 /*
  * POST
  */
-router.post('/', carController.create);
+router.post('/', (req, res, next) => {
+    new carModel(req.body)
+        .save()
+        .then(car => res.send(car))
+        .catch(next);
+})
 
 /*
  * PUT
  */
-router.put('/:id', carController.update);
+router.put('/:id', (req, res, next) => {
+    carModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        .then(car => {
+            res.send(car);
+        })
+        .catch(next);
+    })
 
 /*
  * DELETE
  */
-router.delete('/:id', carController.remove);
+router.delete('/:id', (req, res, next) => {
+    carModel.findByIdAndRemove(req.params.id)
+        .then(response => {
+            res.send({ removed: response ? true : false });
+        })
+        .catch(next);
+    })
 
 module.exports = router;
 
 ```
 
-### Controller
-controllers/carController.js :
-```javascript
-var carModel = require('../models/carModel.js');
-
-/**
- * carController.js
- *
- * @description :: Server-side logic for managing cars.
- */
-module.exports = {
-
-    /**
-     * carController.list()
-     */
-    list: function(req, res) {
-        carModel.find(function(err, cars){
-            if(err) {
-                return res.status(500).json({
-                    message: 'Error getting car.'
-                });
-            }
-            return res.json(cars);
-        });
-    },
-
-    /**
-     * carController.show()
-     */
-    show: function(req, res) {
-        var id = req.params.id;
-        carModel.findOne({_id: id}, function(err, car){
-            if(err) {
-                return res.status(500).json({
-                    message: 'Error getting car.'
-                });
-            }
-            if(!car) {
-                return res.status(404).json({
-                    message: 'No such car'
-                });
-            }
-            return res.json(car);
-        });
-    },
-
-    /**
-     * carController.create()
-     */
-    create: function(req, res) {
-        var car = new carModel({
-			color : req.body.color,
-			door : req.body.door
-        });
-
-        car.save(function(err, car){
-            if(err) {
-                return res.status(500).json({
-                    message: 'Error saving car',
-                    error: err
-                });
-            }
-            return res.json({
-                message: 'saved',
-                _id: car._id
-            });
-        });
-    },
-
-    /**
-     * carController.update()
-     */
-    update: function(req, res) {
-        var id = req.params.id;
-        carModel.findOne({_id: id}, function(err, car){
-            if(err) {
-                return res.status(500).json({
-                    message: 'Error saving car',
-                    error: err
-                });
-            }
-            if(!car) {
-                return res.status(404).json({
-                    message: 'No such car'
-                });
-            }
-
-            car.color =  req.body.color ? req.body.color : car.color;
-			car.door =  req.body.door ? req.body.door : car.door;
-			
-            car.save(function(err, car){
-                if(err) {
-                    return res.status(500).json({
-                        message: 'Error getting car.'
-                    });
-                }
-                if(!car) {
-                    return res.status(404).json({
-                        message: 'No such car'
-                    });
-                }
-                return res.json(car);
-            });
-        });
-    },
-
-    /**
-     * carController.remove()
-     */
-    remove: function(req, res) {
-        var id = req.params.id;
-        carModel.findByIdAndRemove(id, function(err, car){
-            if(err) {
-                return res.status(500).json({
-                    message: 'Error getting car.'
-                });
-            }
-            return res.json(car);
-        });
-    }
-};
-```
 
 ### With files tree generation by module
 ```bash
@@ -257,5 +166,5 @@ app.use('/cars', cars);
 
 ## Licence
 
-Copyright (c) 2017 Damien Perrier
+Copyright (c) 2017 Keeley Hammond & Chris Wallace
 Licensed under the [MIT license](LICENSE).

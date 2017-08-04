@@ -17,7 +17,6 @@ router
             .catch(next);
     })
 
-
     .get('/:id', (req, res, next) => {
         const id = req.params.id;
         {modelName}.findById(id).lean()
