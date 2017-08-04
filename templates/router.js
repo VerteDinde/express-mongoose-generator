@@ -11,7 +11,7 @@ router
     })
 
     .post('/', (req, res, next) => {
-        new {modelName}(req.body) //author does instead of req.body
+        new {modelName}(req.body)
             .save()
             .then({name} => res.send({name}))
             .catch(next);
