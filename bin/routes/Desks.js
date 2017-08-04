@@ -1,40 +1,40 @@
 var express = require('express');
 var router = express.Router();
-var {modelName} = require({modelPath});
+var Desk = require('../models/DeskModel.js');
 
 router
     .get('/', (req, res, next) => {
-        {modelName}.find()
+        Desk.find()
             .select('-__v')
-            .then({pluralName} => res.send({pluralName}))
+            .then(Desks => res.send(Desks))
             .catch(next);
     })
 
     .post('/', (req, res, next) => {
-        new {modelName}(req.body) //author does instead of req.body
+        new Desk(req.body) //author does instead of req.body
             .save()
-            .then({name} => res.send({name}))
+            .then(desk => res.send(desk))
             .catch(next);
     })
 
 
     .get('/:id', (req, res, next) => {
         const id = req.params.id;
-        {modelName}.findById(id).lean()
-            .then({name} => res.send({name}))
+        Desk.findById(id).lean()
+            .then(desk => res.send(desk))
             .catch(next);
     })
 
     .put('/:id', (req, res, next) => {
-        {modelName}.findByIdAndUpdate(req.params.id, req.body, { new: true })
-            .then({name} => {
-                res.send({name});
+        Desk.findByIdAndUpdate(req.params.id, req.body, { new: true })
+            .then(desk => {
+                res.send(desk);
             })
             .catch(next);
     })
 
     .delete('/:id', (req, res, next) => {
-        {modelName}.findByIdAndRemove(req.params.id)
+        Desk.findByIdAndRemove(req.params.id)
             .then(response => {
                 res.send({ removed: response ? true : false });
             })
