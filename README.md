@@ -5,7 +5,7 @@ A mongoose model, REST controller and Express router code generator for Express.
 
 ## Installation
 ```bash
-$ npm install -g express-mongoose-generator
+$ npm install -g express-mongoose-generator-promisified
 ```
 
 ## Usage

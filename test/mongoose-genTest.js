@@ -104,10 +104,6 @@ describe('mongoose-gen', function () {
                     assert.notEqual(files.indexOf('models/modelNameModel.js'), -1);
                     done();
                 });
-                it('Should have controller file', function (done) {
-                    assert.notEqual(files.indexOf('controllers/modelNameController.js'), -1);
-                    done();
-                });
                 it('Should have router file', function (done) {
                     assert.notEqual(files.indexOf('routes/modelNameRoutes.js'), -1);
                     done();
@@ -217,10 +213,6 @@ describe('mongoose-gen', function () {
                 });
                 it('Should have model file', function (done) {
                     assert.notEqual(files.indexOf('models/modelNameModel.js'), -1);
-                    done();
-                });
-                it('Should have controller file', function (done) {
-                    assert.notEqual(files.indexOf('controllers/modelNameController.js'), -1);
                     done();
                 });
                 it('Should have router file', function (done) {
