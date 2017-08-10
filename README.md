@@ -1,7 +1,9 @@
 [![Build Status](https://travis-ci.org/DamienP33/express-mongoose-generator.svg?branch=master)](https://travis-ci.org/DamienP33/express-mongoose-generator)
 # express-mongoose-generator-promise
 
-A mongoose model, REST controller and Express router code generator for Express.js 4 application. Branched from DamienP33's mongoose generator and converted to ES6 syntax/promisified.
+A mongoose model, REST controller and Express router code generator for Express.js 4 application, with promisified syntax. 
+
+Branched from [DamienP33's](<damienperrier33@gmail.com>) mongoose generator and converted to ES6 syntax/promisified.
 
 ## Installation
 ```bash

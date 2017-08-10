@@ -1,10 +1,11 @@
 {
-    "name": "express-mongoose-generator",
+    "name": "express-mongoose-generator-promise",
     "version": "3.0.3",
     "description": "It’s a mongoose model, REST controller and Express router code generator for Express.js 4 application",
-    "author": "Damien Perrier <damienperrier33@gmail.com>",
+    "author": "Keeley Hammond <keeleymhammond@gmail.com>",
     "contributors": [
-        "romuloctba"
+        "kawallis",
+        "DamienP33"
     ],
     "keywords": [
         "mongodb",
@@ -19,7 +20,7 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/DamienP33/express-mongoose-generator"
+        "url": "https://github.com/VerteDinde/express-mongoose-generator"
     },
     "main": "bin/mongoose-gen",
     "scripts": {
